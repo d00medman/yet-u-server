@@ -6,7 +6,7 @@
 
 (defn respond-hello [request]
   {:status 200
-   :body "Hallo Weld"})
+   :body "Hola Mundo"})
 
 (defn ok [body]
   {:status 200 :body body})
@@ -92,7 +92,6 @@
                        (assoc service-map
                               ::http/join? false))))
   (prn "Server started on localhost:8890")
-  (prn "Enter (reset) to reload.")
   :started)
 
 (defn halt []
@@ -102,3 +101,4 @@
   (halt)
   (refresh :after 'catalog.core/go))
 
+(defn -main [& args] (go))

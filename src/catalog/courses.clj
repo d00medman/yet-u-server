@@ -2,7 +2,6 @@
   (:require [catalog.sql.courses :as sql]
             [catalog.config :refer [db]]
             [io.pedestal.http :as http]
-            [net.cgrand.xforms :as x]
             [clojure.spec.alpha :as s]
   ))
 
@@ -18,40 +17,8 @@
 
 (s/def ::course-update (s/keys :req-un [::course_id]))
 
-; (defn try-this [item] 
-;   (println "gabagool")
-;   (println item)
-; )
-
-; Another option, but cannot readily determine how to extend this method to 
-; (defn structure-into []
-;   (into {} (x/by-key :name (comp (map :starts_at) (x/into []))) (sql/courses db))
-; )
-
-; (defn structure-courses []
-  ; (def raw (sql/courses db))
-  ; (doall (map inc raw))
-  ; (println "error after doall map inc raw")
-  ; (apply (map (try-this raw))))
-  ; (let [nm (doall raw)]
-  ;   (println "test")       
-  ;   (println nm))
-  ; (let [nm (get-in raw [ :name])]       
-  ;   (println "test again")       
-  ;   (println nm)))
-  ; (get-in (first s) [:name])
-  ; (apply (map println raw))
-  ; (println (type raw))
-  ; (raw)
-;   ()
-; )
-  ; (println "hola weld")
-  ; (sql/courses db))
-  ; (sql/courses db))
-
 (defn single-course [course_id]
   (println "single course")
-  ; (println (type course_id))
   (http/json-response (sql/single-course db { :course_id (Integer/parseInt course_id) }))
 )
 
@@ -102,8 +69,6 @@
                               [:course_id :starts_at])]
     (if (s/valid? ::session new-session)
       (let [[_ id] (sql/new-session db new-session)]
-        ; (println "recovered vars")
-        ; (println starts_at)
         (http/json-response {:msg "Course session created successfully."
                              :id id 
                              :timeframe (sql/course-end-time db { :id id })
@@ -117,13 +82,11 @@
 
 (defn delete-session [session_id]
   (println "delete session")
-  ; (println (sql/delete-session db {:id session_id}))
   (zero? (sql/delete-session db {:id (Integer/parseInt session_id)}))
 )
 
 (defn delete-course [course_id]
   (println "delete course")
-  ; (println (sql/delete-session db {:id session_id}))
   (zero? (sql/delete-course db {:id (Integer/parseInt course_id)}))
 )
 
